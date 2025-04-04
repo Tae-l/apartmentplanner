@@ -2,6 +2,7 @@ import copy
 import json
 import logging
 import re
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from os import PathLike
 from pathlib import Path
@@ -190,12 +191,15 @@ class Apartment:
 
         extension = output_path.suffix
 
+        output_dict = OrderedDict(sorted({room.name: room for room in self.rooms}.items()))
+
         if extension.lower() == ".json":
             output = {
                 "apartment": self.chairs,
             }
-            for room in self.rooms:
-                output.update({room.name: room.chairs})
+
+            for key, value in output_dict.items():
+                output.update({key: value.chairs})
 
             with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(output, f, indent=4)
@@ -205,9 +209,9 @@ class Apartment:
                 f"total:\n"
                 f"W: {self.chairs['W']}, P: {self.chairs['P']}, S: {self.chairs['S']}, C: {self.chairs['C']}\n"
             )
-            for room in self.rooms:
+            for name, room in output_dict.items():
                 output += (
-                    f"{room.name}\n"
+                    f"{name}:\n"
                     f"W: {room.chairs['W']}, P: {room.chairs['P']}, S: {room.chairs['S']}, C: {room.chairs['C']}\n"
                 )
 
