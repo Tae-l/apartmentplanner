@@ -1,0 +1,14 @@
+# Ignore dependencies installed in venv
+venv/
+
+# Ignore package build files and interpreter related files
+*.egg*
+build/
+dist/
+__pycache__/
+
+# Ignore IDE related files
+.idea/
+
+# Ignore TMP directories in tests
+tests/tmp_*/*
